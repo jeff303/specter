@@ -34,7 +34,12 @@
                     [org.clojure/clojurescript "1.10.439"]]}
              :bench {:dependencies [[org.clojure/clojure "1.9.0"]
                                     [criterium "0.4.4"]]}
-             :test {:dependencies [[org.clojure/clojure "1.7.0"]]}}
+             :test {:dependencies [[org.clojure/clojure "1.7.0"]]}
+
+             :self-host {:dependencies [[org.clojure/test.check "0.9.1-SNAPSHOT"]
+                                        [org.clojure/clojure "1.8.0"]
+                                        [org.clojure/clojurescript "1.9.229"]]
+                         :main clojure.main}}
 
    :deploy-repositories
          [["clojars" {:url "https://repo.clojars.org"
