@@ -10,7 +10,8 @@
   :auto-clean false
   :dependencies [[riddley "0.1.12"]]
   :plugins [[lein-codox "0.10.7"]
-            [lein-doo "0.1.7"]]
+            [lein-doo "0.1.10"]
+            [lein-tach "1.0.0"]]
   :codox {:source-paths ["target/classes" "src/clj"]
           :namespaces [com.rpl.specter
                        com.rpl.specter.zipper
@@ -27,9 +28,10 @@
                                    :main 'com.rpl.specter.cljs-test-runner
                                    :target :nodejs
                                    :optimizations :none}}]}
+  :tach {:test-runner-ns 'com.rpl.specter.cljs-self-test-runner :debug? true}
 
   :profiles {:dev {:dependencies
-                   [[org.clojure/test.check "0.9.0"]
+                   [[org.clojure/test.check "0.10.0"]
                     [org.clojure/clojure "1.9.0"]
                     [org.clojure/clojurescript "1.10.439"]]}
              :bench {:dependencies [[org.clojure/clojure "1.9.0"]
