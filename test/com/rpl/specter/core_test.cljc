@@ -1,9 +1,9 @@
 (ns com.rpl.specter.core-test
   #?(:cljs (:require-macros
-            [cljs.test :refer [is deftest]]
             [clojure.test.check.clojure-test :refer [defspec]]
             [com.rpl.specter.cljs-test-helpers :refer [for-all+]]
             [com.rpl.specter.test-helpers :refer [ic-test]]
+            [net.cgrand.macrovich :as mvch]
             [com.rpl.specter
               :refer [defprotocolpath defnav extend-protocolpath
                       nav declarepath providepath select select-one select-one!
@@ -32,6 +32,8 @@
             #?(:cljs [clojure.test.check :as tc])
             #?(:cljs [clojure.test.check.generators :as gen])
             #?(:cljs [clojure.test.check.properties :as prop :include-macros true])
+            #?(:cljs [cljs.test :refer-macros [is deftest]])
+            #?(:cljs [clojure.test.check.clojure-test :refer-macros [defspec]])
             [com.rpl.specter :as s]
             [com.rpl.specter.transients :as t]
             [clojure.set :as set]))
@@ -60,7 +62,6 @@
      pred (gen/elements [odd? even?])]
     (= (select [s/ALL kw pred] v)
        (->> v (map kw) (filter pred)))))
-
 
 (defspec select-pos-extreme-pred
   (for-all+
