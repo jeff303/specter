@@ -29,6 +29,7 @@
 
   (:require #?(:clj [clojure.test.check.generators :as gen])
             #?(:clj [clojure.test.check.properties :as prop])
+            #?(:clj [net.cgrand.macrovich :as mvch])
             #?(:cljs [clojure.test.check :as tc])
             #?(:cljs [clojure.test.check.generators :as gen])
             #?(:cljs [clojure.test.check.properties :as prop :include-macros true])

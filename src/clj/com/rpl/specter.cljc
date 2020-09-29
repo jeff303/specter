@@ -212,12 +212,10 @@
                  embed (i/maybe-direct-nav path (-> s meta :direct-nav))]
              `(com.rpl.specter.impl/->LocalSym ~path (quote ~embed)))
            ;; var-get doesn't work in cljs, so capture the val in the macro instead
-           (mvch/case :clj
            `(com.rpl.specter.impl/->VarUse
               ~path
-              ~(if-not (instance? Class (resolve path)) `(var ~path))
-              (quote ~path))
-         :cljs (quote ~path)))
+              ~(if-not (mvch/case :clj (instance? Class (resolve path)) :cljs false) `(var ~path))
+              (quote ~path)))
 
 
          (i/fn-invocation? path)
@@ -506,26 +504,18 @@
        "Used in conjunction with `defprotocolpath`. See [[defprotocolpath]]."
        [protpath & extensions]
        (let [extensions (partition 2 extensions)
-             embed (vec (for [[t p] extensions] [t `(quote ~p)]))]
-         `(extend-protocolpath*
-           ~(protpath-sym protpath)
-           ~embed)))
+             embed (vec (for [[t p] extensions] [t p]))
+             prot-sym (protpath-sym protpath)
+             prot (mvch/case :clj  (-> prot-sym resolve deref) :cljs prot-sym)
+             m (-> prot :sigs keys first)
+             params (-> prot :sigs first last :arglists first)]
+         `(do ~@(for [[atype paths-expr] embed]
+           `(extend-protocol ~prot-sym ~atype
+             (~m ~params (path ~paths-expr)))))))
 
     (defmacro end-fn [& args]
       `(n/->SrangeEndFunction (fn ~@args)))
-)
-
-(mvch/usetime
-
-  (defn extend-protocolpath* [protpath-prot extensions]
-    (let [m (-> protpath-prot :sigs keys first)
-          params (-> protpath-prot :sigs first last :arglists first)]
-      (doseq [[atype path-code] extensions]
-        (extend atype protpath-prot
-          {m (binding [*compile-files* false]
-               (eval `(fn ~params (path ~path-code))))}))))
-  )
-
+) ; end deftime
 
   (defn comp-paths
   "Returns a compiled version of the given path for use with
@@ -1511,4 +1501,4 @@
    [& path]
    (map compact* path)
    ))
-)
+) ; end usetime
