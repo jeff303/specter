@@ -885,7 +885,7 @@
     [[true] [false]])
   (ic-test
     [v]
-    [s/ALL (double-str-keypath v (inc v))]
+    [s/ALL (double-str-keypath v ((mvch/case :clj 'clojure.core/inc :cljs 'cljs.core/inc) v))]
     str
     [{"12" :a "1011" :b} {"1011" :c}]
     [[1] [10]])
